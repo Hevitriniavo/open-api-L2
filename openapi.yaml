@@ -57,7 +57,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Book'
+                $ref: '#/components/schemas/CrupdateBook' 
       responses:
         200:
           description: List of created or updated books
@@ -147,6 +147,14 @@ paths:
                 $ref: '#/components/schemas/Author'
 components:
   schemas:
+    CrupdateBook: 
+      allOf:
+        - $ref: '#/components/schemas/Book'
+        - type: object
+          properties:
+            author:
+              type: object
+              nullable: true
     Book:
       type: object
       properties:
