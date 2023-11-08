@@ -10,6 +10,8 @@ tags:
     description: Operations related to books
   - name: Authors
     description: Operations related to authors
+  - name: Topics
+    description: Operations related to topics  
 paths:
   /books:
     get:
@@ -150,6 +152,45 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Author'
+  /topics:
+    get:
+      tags:
+        - Topics
+      summary: Get all topics
+      description: Retrieve a list of all topics in the library.
+      operationId: getTopics
+      responses:
+        200:
+          description: List of topics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+
+    put:
+      tags:
+        - Topics
+      summary: Create or update topics
+      description: Create or update a list of topics in the library.
+      operationId: crupdateTopics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Topic'
+      responses:
+        200:
+          description: List of created or updated topics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic' 
 
   /authors/{authorId}:
     delete:
@@ -246,7 +287,7 @@ components:
     CrupdateBook:
       type: object
       allOf:
-        - $ref: "#/components/schemas/Topics"
+        - $ref: "#/components/schemas/Topic"
       properties:
         id:
           type: string
@@ -271,7 +312,7 @@ components:
       enum:
         - M
         - F
-    Topics:
+    Topic:
       type: object
       properties:
         tipicsId:
