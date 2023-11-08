@@ -145,25 +145,52 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Author'
+
+  /books/{bookId}/authors/{authorId}:
+    put:
+      tags:
+        - Books
+      summary: Attach an Author to a Book
+      description: Attach an author to a specific book by specifying their respective IDs.
+      operationId: attachAuthorToBook
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of the book
+          required: true
+          schema:
+            type: string
+        - name: authorId
+          in: path
+          description: ID of the author
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Author attached to the book successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'              
 components:
   schemas:
-    CrupdateBook: 
+    Book: 
       allOf:
-        - $ref: '#/components/schemas/Book'
+        - $ref: '#/components/schemas/CrupdateBook'
         - type: object
           properties:
             author:
               type: object
               nullable: true
-    Book:
+
+    CrupdateBook:
       type: object
       properties:
         id:
           type: string
         bookName:
           type: string
-        author:
-          $ref: '#/components/schemas/Author'
         pageNumbers:
           type: integer
         topic:
