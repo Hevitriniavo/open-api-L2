@@ -197,7 +197,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Book'
-                                            
+
 components:
   schemas:
     Book: 
@@ -248,3 +248,6 @@ components:
       enum:
         - M
         - F
+
+# b - 1. UpdateBookAuthor contient uniquement les identifiants bookId et authorId pour mettre à jour la relation livre-auteur spécifique.
+# b - 2. L'objet UpdateBookAuthor devrait inclure les propriétés de CrupdateBook et de Author lorsque la mise à jour de la relation entre le livre et l'auteur nécessite des modifications des détails spécifiques du livre ou de l'auteur en plus de la simple mise à jour de leur relation.
