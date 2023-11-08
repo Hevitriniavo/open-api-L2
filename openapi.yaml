@@ -351,7 +351,32 @@ paths:
                 items:
                   oneOf:
                     - $ref: '#/components/schemas/Topic'
-                    - $ref: '#/components/schemas/Author'                 
+                    - $ref: '#/components/schemas/Author'
+  # Comment est ce que vous penser faire si c'etait pas un par un mais c'etait plusieurs en même temps plusieurs authors
+  /authors/batch-update:
+    put:
+      tags:
+        - Authors
+      summary: Batch Update Authors
+      description: Update a list of authors in the library.
+      operationId: batchUpdateAuthors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Author'
+      responses:
+        200:
+          description: List of updated authors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Author'
+                                   
 components:
   schemas:
     Book: 
