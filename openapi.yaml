@@ -10,8 +10,7 @@ tags:
     description: Operations related to books
   - name: Authors
     description: Operations related to authors
-  - name: Topics
-    description: Operations related to topics  
+    
 paths:
   /books:
     get:
@@ -40,18 +39,7 @@ paths:
           schema:
             type: string
             format: date
-        - in: query
-          name: page
-          description: Page number
-          schema:
-            type: integer
-            default: 1
-        - in: query
-          name: pageSize
-          description: Number of items per page
-          schema:
-            type: integer
-            default: 50
+
       responses:
         200:
           description: List of books
@@ -111,18 +99,8 @@ paths:
           description: Filter by author name
           schema:
             type: string
-        - in: query
-          name: page
-          description: Page number
-          schema:
-            type: integer
-            default: 1
-        - in: query
-          name: pageSize
-          description: Number of items per page
-          schema:
-            type: integer
-            default: 50
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
       responses:
         200:
           description: List of authors
@@ -153,59 +131,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Author'
-  /topics:
-    get:
-      tags:
-        - Topics
-      summary: Get all topics
-      description: Retrieve a list of all topics in the library.
-      operationId: getTopics
-      responses:
-        200:
-          description: List of topics
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Topic'
-
-    put:
-      tags:
-        - Topics
-      summary: Create or update topics
-      description: Create or update a list of topics in the library.
-      operationId: crupdateTopics
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/Topic'
-      responses:
-        200:
-          description: List of created or updated topics
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Topic' 
-    delete:
-      tags:
-        - Topics
-      summary: Delete a topic
-      description: Delete a topic from the library by ID.
-      operationId: deleteTopics
-      responses:
-        200:
-          description: Topics deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Topic'  
+                  $ref: '#/components/schemas/Author' 
 
   /authors/{authorId}:
     delete:
@@ -256,34 +182,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'  
-  /authors/{authorsId}/topics/{topicsId}:
-    put:
-      tags:
-        - Authors
-        - Topics
-      summary: Assign Topics to Author
-      description: Assign topics to a specific author by specifying their respective IDs.
-      operationId: assignTopicsToAuthor
-      parameters:
-        - name: authorsId
-          in: path
-          description: ID of the author
-          required: true
-          schema:
-            type: string
-        - name: topicsId
-          in: path
-          description: ID of the topic
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Topics assigned to the author successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Author'
+  
                 
   /books/authors:
     put:
@@ -307,51 +206,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Book'
-  /books/topics:
-    put:
-      tags:
-        - Books
-      summary: Update Book Topics
-      description: Update the topics of multiple books by specifying the bookId and topicsId pairs.
-      operationId: updateBookTopics
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                bookId:
-                  type: string
-                topicsId:
-                  type: string
-      responses:
-        200:
-          description: Books' topics updated successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Book'  
-  /authotopics:
-    get:
-      tags:
-        - Topics
-      summary: Get all author topics
-      description: Retrieve a list of all topics related to authors in the library.
-      operationId: getAuthorTopics
-      responses:
-        200:
-          description: List of author topics
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  oneOf:
-                    - $ref: '#/components/schemas/Topic'
-                    - $ref: '#/components/schemas/Author'
+                  $ref: '#/components/schemas/Book' 
+  
   # Comment est ce que vous penser faire si c'etait pas un par un mais c'etait plusieurs en même temps plusieurs authors
   /authors/batch-update:
     put:
@@ -424,12 +280,12 @@ components:
         - M
         - F
     Topic:
-      type: object
-      properties:
-        tipicsId:
-          type: string
-        topicName:
-          type: string
+      type: string
+      enum: 
+      - ROMANCE
+      - COMEDY
+      - OTHER
+
   parameters:
     PageParam:
       in: query
