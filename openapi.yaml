@@ -16,7 +16,7 @@ paths:
       tags:
         - Books
       summary: Get all books
-      description: Retrieve a list of all books in the library, optionally filtered by bookName and releaseDate range.
+      description: Retrieve a list of all books in the library, optionally filtered by bookName and releaseDate range. Supports pagination.
       operationId: getBooks
       parameters:
         - in: query
@@ -36,6 +36,18 @@ paths:
           schema:
             type: string
             format: date
+        - in: query
+          name: page
+          description: Page number
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: pageSize
+          description: Number of items per page
+          schema:
+            type: integer
+            default: 50
       responses:
         200:
           description: List of books
@@ -45,6 +57,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Book'
+                  
     put:
       tags:
         - Books
@@ -80,6 +93,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'
+                
   /authors:
     get:
       tags:
@@ -124,6 +138,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Author'
+
   /authors/{authorId}:
     delete:
       tags:
