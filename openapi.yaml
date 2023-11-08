@@ -172,7 +172,32 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Book'              
+                $ref: '#/components/schemas/Book'  
+
+  /books/authors:
+    put:
+      tags:
+        - Books
+      summary: Update Book Authors
+      description: Update the authors of multiple books by specifying the bookId and authorId pairs.
+      operationId: updateBookAuthors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/UpdateBookAuthor'
+      responses:
+        200:
+          description: Books' authors updated successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+                                            
 components:
   schemas:
     Book: 
@@ -183,6 +208,13 @@ components:
             author:
               type: object
               nullable: true
+    UpdateBookAuthor:
+      type: object
+      properties:
+        bookId:
+          type: string
+        authorId:
+          type: string
 
     CrupdateBook:
       type: object
