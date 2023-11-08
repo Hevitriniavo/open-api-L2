@@ -245,6 +245,8 @@ components:
 
     CrupdateBook:
       type: object
+      allOf:
+        - $ref: "#/components/schemas/Topics"
       properties:
         id:
           type: string
@@ -252,12 +254,6 @@ components:
           type: string
         pageNumbers:
           type: integer
-        topic:
-          type: string
-          enum:
-            - ROMANCE
-            - COMEDY
-            - OTHER
         releaseDate:
           type: string
           format: date
@@ -275,7 +271,13 @@ components:
       enum:
         - M
         - F
-
+    Topics:
+      type: object
+      properties:
+        tipicsId:
+          type: string
+        topicName:
+          type: string
 # b - 1. UpdateBookAuthor contient uniquement les identifiants bookId et authorId pour mettre à jour la relation livre-auteur spécifique.
 # b - 2. L'objet UpdateBookAuthor devrait inclure les propriétés de CrupdateBook et de Author lorsque la mise à jour de la relation entre le livre et l'auteur nécessite des modifications des détails spécifiques du livre ou de l'auteur en plus de la simple mise à jour de leur relation.
 # 3- a La pagination est nécessaire pour améliorer les performances des requêtes en divisant les résultats en pages plus petites, réduisant ainsi la charge du serveur et améliorant le temps de réponse pour les clients. Cela permet également de limiter la quantité de données retournées à la fois, ce qui est utile lorsque l'on travaille avec de grands ensembles de données.
