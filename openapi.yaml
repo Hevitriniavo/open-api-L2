@@ -2,59 +2,61 @@ openapi: 3.0.3
 info:
   title: Library API
   version: 1.0.1
-  description: STD22001
+  description: STD22036
 servers:
   - url: https://library.com
 tags:
   - name: Books
-    description: Operations related to books
   - name: Authors
-    description: Operations related to authors
-    
+  - name: Topics
 paths:
   /books:
     get:
       tags:
         - Books
       summary: Get all books
-      description: Retrieve a list of all books in the library, optionally filtered by bookName and releaseDate range. Supports pagination.
+      description: The returned books are ordered by updated datetime.
       operationId: getBooks
       parameters:
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
         - in: query
           name: bookName
-          description: Filter by book name
+          description: Filter return books by given name
+          required: false
           schema:
             type: string
         - in: query
-          name: releaseDateMin
-          description: Minimum release date
-          schema:
-            type: string
-            format: date
+          name: releaseDate
+          description: Filter return books by intervals of date of the releaseDate.
+          required: true
+          schema: 
+            type: string 
         - in: query
-          name: releaseDateMax
-          description: Maximum release date
+          name: page 
+          description: "Min Page number for pagination"
+          required: true
           schema:
-            type: string
-            format: date
-
+            type: integer
+            default: 1
+        - in: query
+          name: pageSize
+          description: "Max Page number for pagination"
+          required: true
+          schema:
+            type: integer
+            default: 50
       responses:
         200:
-          description: List of books
+          description: The list of filtered books
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Book'
-                  
     put:
       tags:
         - Books
-      summary: Create or update books
-      description: Create or update a list of books in the library.
+      summary: Create or update a list of books
       operationId: crupdateBooks
       requestBody:
         content:
@@ -62,199 +64,299 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/CrupdateBook' 
+                $ref: '#/components/schemas/CrupdatedBook'
       responses:
         200:
-          description: List of created or updated books
+          description: The list of created or updated books
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Book'
-    delete:
+  /books/authors:
+    put:
       tags:
         - Books
-      summary: Delete a book
-      description: Delete a book from the library by ID.
-      operationId: deleteBook
+      summary: created all books
+      description: The returned books are ordered by updated datetime.
+      operationId: getBooksAndAuthors
+      requestBody:
+        description: created or updated book with author in request body the id
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                properties:
+                  bookId:
+                    type: string
+                  authorsId:
+                    type: string
+          
       responses:
         200:
-          description: Book deleted successfully
+          description: Returned  list of  books
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Book'
-                
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+
+  /books/{bookId}/authors/{authorsId}:
+    put:
+      tags:
+        - Books
+      summary: created and updated a book
+      description: The returned books are ordered by updated datetime.
+      operationId: getBookIdAndAuthorId
+      parameters:
+        - in: path
+          name: bookId
+          description: Filter return books
+          required: true
+          schema:
+            type: string
+
+        - in: path
+          name:  authorsId  
+          description: filter books
+          schema:
+            type: string
+          required: true  
+
+      responses:
+        200:
+          description: Returned  list of  books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+
+  /books/topics:
+    put:
+      tags:
+        - Books
+      summary: created all books
+      description: The returned books are ordered by updated datetime.
+      operationId: getBooksAndTopics
+      requestBody:
+        description: created or updated book with topics in request body the id
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                properties:
+                  bookId:
+                    type: string
+                  topicsId:
+                    type: string
+          
+      responses:
+        200:
+          description: Returned  list of  books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+
+  /books/{bookId}/topics/{topicsId}:
+    put:
+      tags:
+        - Books
+      summary: created and updated a book
+      description: The returned books are ordered by updated datetime.
+      operationId: getBookIdIAndTopicsd
+      parameters:
+        - in: path
+          name: bookId
+          description: Filter return books
+          required: true
+          schema:
+            type: string
+
+        - in: path
+          name:  topicsId 
+          description: filter books
+          schema:
+            type: string
+          required: true  
+
+      responses:
+        200:
+          description: Returned  list of  books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
   /authors:
     get:
       tags:
         - Authors
       summary: Get all authors
-      description: Retrieve a list of all authors in the library, optionally filtered by authorName. Supports pagination.
-      operationId: getAuthors
+      description: The returned author are ordered by name.
+      operationId: getAuthorByName
       parameters:
-        - in: query
-          name: authorName
-          description: Filter by author name
+        - name: AuthorName
+          in: query
+          description: Filter author by name
+          required: false
           schema:
             type: string
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
+        - in: query
+          name: page 
+          description: "Min Page number for pagination"
+          required: true
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: pageSize
+          description: "Max Page number for pagination"
+          required: true
+          schema:
+            type: integer
+            default: 50
       responses:
-        200:
-          description: List of authors
+        '200':
+          description: successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Author'
-    put:
+                $ref: '#/components/schemas/Author'
+    
+    put: 
       tags:
         - Authors
-      summary: Create or update authors
-      description: Create or update a list of authors in the library.
-      operationId: crupdateAuthors
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/Author'
+      summary: update author
+      description: update author by ID
+      operationId: updateAuthor
+      parameters:
+        - name: AuthorName
+          in: query
+          description: name that need to be update
+          required: true
+          schema: 
+            type: string
       responses:
-        200:
-          description: List of created or updated authors
+        '200':
+          description: successful operation
           content:
             application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Author' 
-
-  /authors/{authorId}:
+              schema: 
+                $ref: '#/components/schemas/Author'
+    
     delete:
       tags:
         - Authors
-      summary: Delete an author
-      description: Delete an author from the library by ID.
+      summary: delete author
+      description: delete author by ID 
       operationId: deleteAuthor
       parameters:
-        - name: authorId
-          in: path
-          description: ID of the author to delete
+        - name: AuthorName
+          in: query
+          description: The name that needs to be delete
           required: true
-          schema:
+          schema: 
             type: string
       responses:
-        200:
-          description: Author deleted successfully
+        '200':
+          description: successful operation
           content:
             application/json:
-              schema:
+              schema: 
                 $ref: '#/components/schemas/Author'
 
-  /books/{bookId}/authors/{authorId}:
-    put:
+  /topics:
+    get:
       tags:
-        - Books
-      summary: Attach an Author to a Book
-      description: Attach an author to a specific book by specifying their respective IDs.
-      operationId: attachAuthorToBook
+        - Topics
+      summary: get Topics  
+      operationId: getTopics
+      description: The returned of list Topics.
       parameters:
-        - name: bookId
-          in: path
-          description: ID of the book
+        - in: query
+          name: page 
+          description: "Min Page number for pagination"
           required: true
           schema:
-            type: string
-        - name: authorId
-          in: path
-          description: ID of the author
+            type: integer
+            default: 1
+        - in: query
+          name: pageSize
+          description: "Max Page number for pagination"
           required: true
           schema:
-            type: string
+            type: integer
+            default: 50
+    
       responses:
         200:
-          description: Author attached to the book successfully
+          description: The list of filtered topics
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Book'  
-  
-                
-  /books/authors:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topics'
+
     put:
       tags:
-        - Books
-      summary: Update Book Authors
-      description: Update the authors of multiple books by specifying the bookId and authorId pairs.
-      operationId: updateBookAuthors
+        - Topics
+      summary: Create or update a list of topics
+      operationId: crupdateTopics
       requestBody:
         content:
           application/json:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/UpdateBookAuthor'
+                $ref: '#/components/schemas/Topics'
       responses:
         200:
-          description: Books' authors updated successfully
+          description: The list of created or updated Topics
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Book' 
-  
-  # Comment est ce que vous penser faire si c'etait pas un par un mais c'etait plusieurs en même temps plusieurs authors
-  /authors/batch-update:
-    put:
+                  $ref: '#/components/schemas/Topics'
+
+    delete:
       tags:
-        - Authors
-      summary: Batch Update Authors
-      description: Update a list of authors in the library.
-      operationId: batchUpdateAuthors
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/Author'
+        - Topics
+      summary: Removed a list of topics
+      operationId: removeTopics
+      parameters:
+        - in: query
+          name: id
+          description: removed topics by id
+          required: false
+          schema:
+            type: string
+
       responses:
         200:
-          description: List of updated authors
+          description: The list of removed topics
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Author'
-                                   
+                  $ref: '#/components/schemas/Topics'
+
 components:
   schemas:
-    Book: 
-      allOf:
-        - $ref: '#/components/schemas/CrupdateBook'
-        - type: object
-          properties:
-            author:
-              type: object
-              nullable: true
-    UpdateBookAuthor:
+    CrupdatedBook:
       type: object
-      properties:
-        bookId:
-          type: string
-        authorId:
-          type: string
-
-    CrupdateBook:
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/Topic"
       properties:
         id:
           type: string
@@ -262,10 +364,22 @@ components:
           type: string
         pageNumbers:
           type: integer
+
         releaseDate:
           type: string
-          format: date
-    Author:
+          format: date  
+    Book:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/CrupdatedBook"
+      properties:
+        Author:
+          $ref: "#/components/schemas/Author"
+        Topics:
+          $ref: "#/components/schemas/Topics"   
+      
+      
+    Author: 
       type: object
       properties:
         id:
@@ -273,40 +387,15 @@ components:
         authorName:
           type: string
         sex:
-          $ref: '#/components/schemas/Sex'
-    Sex:
-      type: string
-      enum:
-        - M
-        - F
-    Topic:
-      type: string
-      enum: 
-      - ROMANCE
-      - COMEDY
-      - OTHER
-
-  parameters:
-    PageParam:
-      in: query
-      name: page
-      description: Page number
-      required: false
-      schema:
-        type: integer
-        default: 1
-
-    PageSizeParam:
-      in: query
-      name: pageSize
-      description: Number of items per page
-      required: false
-      schema:
-        type: integer
-        default: 50
-
-# b - 1. UpdateBookAuthor contient uniquement les identifiants bookId et authorId pour mettre à jour la relation livre-auteur spécifique.
-# b - 2. L'objet UpdateBookAuthor devrait inclure les propriétés de CrupdateBook et de Author lorsque la mise à jour de la relation entre le livre et l'auteur nécessite des modifications des détails spécifiques du livre ou de l'auteur en plus de la simple mise à jour de leur relation.
-# 3- a La pagination est nécessaire pour améliorer les performances des requêtes en divisant les résultats en pages plus petites, réduisant ainsi la charge du serveur et améliorant le temps de réponse pour les clients. Cela permet également de limiter la quantité de données retournées à la fois, ce qui est utile lorsque l'on travaille avec de grands ensembles de données.
-# 4- a - Oui, les en-têtes de requête permettent de transmettre des métadonnées sans surcharger les paramètres de requête, facilitant ainsi une gestion claire et explicite de la pagination.
-#4 -b - La gestion de la pagination via les en-têtes de requête n'est pas obligatoire, mais elle offre une méthode efficace pour transmettre des métadonnées supplémentaires sans surcharger les paramètres de requête. Cela peut faciliter la lisibilité et la clarté des requêtes, en particulier lors de l'utilisation de nombreux paramètres ou de paramètres complexes.
+          type: string
+          enum:
+            - M
+            - F  
+  
+    Topics:
+          type: object
+          properties:
+            id:
+              type: string
+            topicsName:
+              type: string
