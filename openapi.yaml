@@ -256,17 +256,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'  
-  /books/{bookId}/topics/{topicsId}:
+  /authors/{authorsId}/topics/{topicsId}:
     put:
       tags:
-        - Books
-      summary: Assign Topic to Book
-      description: Assign a topic to a specific book by specifying their respective IDs.
-      operationId: assignTopicToBook
+        - Authors
+        - Topics
+      summary: Assign Topics to Author
+      description: Assign topics to a specific author by specifying their respective IDs.
+      operationId: assignTopicsToAuthor
       parameters:
-        - name: bookId
+        - name: authorsId
           in: path
-          description: ID of the book
+          description: ID of the author
           required: true
           schema:
             type: string
@@ -278,11 +279,12 @@ paths:
             type: string
       responses:
         200:
-          description: Topic assigned to the book successfully
+          description: Topics assigned to the author successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Book'
+                $ref: '#/components/schemas/Author'
+                
   /books/authors:
     put:
       tags:
@@ -421,7 +423,7 @@ components:
       schema:
         type: integer
         default: 50
-                
+
 # b - 1. UpdateBookAuthor contient uniquement les identifiants bookId et authorId pour mettre à jour la relation livre-auteur spécifique.
 # b - 2. L'objet UpdateBookAuthor devrait inclure les propriétés de CrupdateBook et de Author lorsque la mise à jour de la relation entre le livre et l'auteur nécessite des modifications des détails spécifiques du livre ou de l'auteur en plus de la simple mise à jour de leur relation.
 # 3- a La pagination est nécessaire pour améliorer les performances des requêtes en divisant les résultats en pages plus petites, réduisant ainsi la charge du serveur et améliorant le temps de réponse pour les clients. Cela permet également de limiter la quantité de données retournées à la fois, ce qui est utile lorsque l'on travaille avec de grands ensembles de données.
