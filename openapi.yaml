@@ -99,7 +99,7 @@ paths:
       tags:
         - Authors
       summary: Get all authors
-      description: Retrieve a list of all authors in the library, optionally filtered by authorName.
+      description: Retrieve a list of all authors in the library, optionally filtered by authorName. Supports pagination.
       operationId: getAuthors
       parameters:
         - in: query
@@ -107,6 +107,18 @@ paths:
           description: Filter by author name
           schema:
             type: string
+        - in: query
+          name: page
+          description: Page number
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: pageSize
+          description: Number of items per page
+          schema:
+            type: integer
+            default: 50
       responses:
         200:
           description: List of authors
@@ -266,3 +278,4 @@ components:
 
 # b - 1. UpdateBookAuthor contient uniquement les identifiants bookId et authorId pour mettre à jour la relation livre-auteur spécifique.
 # b - 2. L'objet UpdateBookAuthor devrait inclure les propriétés de CrupdateBook et de Author lorsque la mise à jour de la relation entre le livre et l'auteur nécessite des modifications des détails spécifiques du livre ou de l'auteur en plus de la simple mise à jour de leur relation.
+# 3- a La pagination est nécessaire pour améliorer les performances des requêtes en divisant les résultats en pages plus petites, réduisant ainsi la charge du serveur et améliorant le temps de réponse pour les clients. Cela permet également de limiter la quantité de données retournées à la fois, ce qui est utile lorsque l'on travaille avec de grands ensembles de données.
