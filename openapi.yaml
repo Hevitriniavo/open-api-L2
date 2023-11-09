@@ -375,18 +375,6 @@ components:
         default: 50
 
   responses:
-    Status200:
-      description: OK
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/StatusResponse'
-              - type: object
-                properties:
-                  body:
-                    type: object
-
     Status400:
       description: Bad request
       content:
@@ -427,3 +415,5 @@ components:
 # 3- a La pagination est nécessaire pour améliorer les performances des requêtes en divisant les résultats en pages plus petites, réduisant ainsi la charge du serveur et améliorant le temps de réponse pour les clients. Cela permet également de limiter la quantité de données retournées à la fois, ce qui est utile lorsque l'on travaille avec de grands ensembles de données.
 # 4- a - Oui, les en-têtes de requête permettent de transmettre des métadonnées sans surcharger les paramètres de requête, facilitant ainsi une gestion claire et explicite de la pagination.
 #4 -b - La gestion de la pagination via les en-têtes de requête n'est pas obligatoire, mais elle offre une méthode efficace pour transmettre des métadonnées supplémentaires sans surcharger les paramètres de requête. Cela peut faciliter la lisibilité et la clarté des requêtes, en particulier lors de l'utilisation de nombreux paramètres ou de paramètres complexes.
+
+#TD3-3-a et b:  Vous avez ajouté deux points d'entrée, "POST /books/import" et "POST /authors/import," pour gérer l'importation de livres et d'auteurs à partir de fichiers Excel et JSON. Les réponses pour les codes de statut 200, 400, 403 et 500 suivent une structure commune grâce à l'utilisation du composant "StatusResponse." Vous avez également expliqué l'importance de la pagination pour améliorer les performances et l'utilisation des en-têtes de requête pour gérer la pagination de manière claire et explicite.
