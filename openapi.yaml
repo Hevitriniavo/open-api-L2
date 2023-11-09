@@ -49,7 +49,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Book'
-                  
+        '400':
+          $ref: '#/components/responses/Status400'
+        '403':
+          $ref: "#/components/responses/Status403"
+        '500':
+          $ref: "#/components/responses/Status500"
     put:
       tags:
         - Books
@@ -72,6 +77,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Book'
+        400:
+          $ref: '#/components/responses/Status400'
+        403:
+          $ref: "#/components/responses/Status403"
+        500:
+          $ref: "#/components/responses/Status500"
+
     delete:
       tags:
         - Books
@@ -85,7 +97,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'
-                
+        400:
+          $ref: '#/components/responses/Status400'
+        403:
+          $ref: "#/components/responses/Status403"
+        500:
+          $ref: "#/components/responses/Status500"        
   /authors:
     get:
       tags:
@@ -110,6 +127,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Author'
+        400:
+          $ref: '#/components/responses/Status400'
+        403:
+          $ref: "#/components/responses/Status403"
+        500:
+          $ref: "#/components/responses/Status500"          
     put:
       tags:
         - Authors
@@ -132,6 +155,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Author' 
+        400:
+          $ref: '#/components/responses/Status400'
+        403:
+          $ref: "#/components/responses/Status403"
+        500:
+          $ref: "#/components/responses/Status500"
 
   /authors/{authorId}:
     delete:
@@ -154,6 +183,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Author'
+        400:
+          $ref: '#/components/responses/Status400'
+        403:
+          $ref: "#/components/responses/Status403"
+        500:
+          $ref: "#/components/responses/Status500"
 
   /books/{bookId}/authors/{authorId}:
     put:
@@ -182,8 +217,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'  
-  
-                
+        400:
+          $ref: '#/components/responses/Status400'
+        403:
+          $ref: "#/components/responses/Status403"
+        500:
+          $ref: "#/components/responses/Status500"
+
   /books/authors:
     put:
       tags:
@@ -207,7 +247,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Book' 
-  
+        400:
+          $ref: '#/components/responses/Status400'
+        403:
+          $ref: "#/components/responses/Status403"
+        500:
+          $ref: "#/components/responses/Status500"
+
   # Comment est ce que vous penser faire si c'etait pas un par un mais c'etait plusieurs en même temps plusieurs authors
   /authors/batch-update:
     put:
@@ -232,9 +278,25 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Author'
-                                   
+        400:
+          $ref: '#/components/responses/Status400'
+        403:
+          $ref: "#/components/responses/Status403"
+        500:
+          $ref: "#/components/responses/Status500"                           
 components:
   schemas:
+    StatusResponse:
+      description: Common response for all status codes
+      type: object
+      properties:
+        status:
+          type: object
+          properties:
+            code:
+              type: integer
+            message:
+              type: string
     Book: 
       allOf:
         - $ref: '#/components/schemas/CrupdateBook'
@@ -285,6 +347,13 @@ components:
       - ROMANCE
       - COMEDY
       - OTHER
+    Status:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
 
   parameters:
     queryPagination:
@@ -305,6 +374,54 @@ components:
         type: integer
         default: 50
 
+  responses:
+    Status200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StatusResponse'
+              - type: object
+                properties:
+                  body:
+                    type: object
+
+    Status400:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StatusResponse'
+              - type: object
+                properties:
+                  body:
+                    type: object
+
+    Status403:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StatusResponse'
+              - type: object
+                properties:
+                  body:
+                    type: object
+
+    Status500:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StatusResponse'
+              - type: object
+                properties:
+                  body:
+                    type: object
 # b - 1. UpdateBookAuthor contient uniquement les identifiants bookId et authorId pour mettre à jour la relation livre-auteur spécifique.
 # b - 2. L'objet UpdateBookAuthor devrait inclure les propriétés de CrupdateBook et de Author lorsque la mise à jour de la relation entre le livre et l'auteur nécessite des modifications des détails spécifiques du livre ou de l'auteur en plus de la simple mise à jour de leur relation.
 # 3- a La pagination est nécessaire pour améliorer les performances des requêtes en divisant les résultats en pages plus petites, réduisant ainsi la charge du serveur et améliorant le temps de réponse pour les clients. Cela permet également de limiter la quantité de données retournées à la fois, ce qui est utile lorsque l'on travaille avec de grands ensembles de données.
