@@ -283,9 +283,80 @@ paths:
         403:
           $ref: "#/components/responses/Status403"
         500:
-          $ref: "#/components/responses/Status500"                           
+          $ref: "#/components/responses/Status500"    
+  /books/import:
+    post:
+      tags:
+        - Books
+      summary: Import books from Excel or JSON
+      description: Import books into the library from Excel or JSON files. Supports both formats.
+      operationId: importBooks
+      requestBody:
+        required: true
+        description: Excel or JSON file containing a list of books
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportAuthor'
+          application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+            schema:
+              $ref: '#/components/schemas/ImportAuthor'
+      responses:
+        200:
+          description: List of imported books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        400:
+          $ref: '#/components/responses/Status400'
+        403:
+          $ref: "#/components/responses/Status403"
+        500:
+          $ref: "#/components/responses/Status500"
+
+  /authors/import:
+    post:
+      tags:
+        - Authors
+      summary: Import authors from Excel or JSON
+      description: Import authors into the library from Excel or JSON files. Supports both formats.
+      operationId: importAuthors
+      requestBody:
+        required: true
+        description: Excel or JSON file containing a list of authors
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportAuthor'
+          application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+            schema:
+              $ref: '#/components/schemas/ImportAuthor'
+
+      responses:
+        200:
+          description: List of imported authors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Author'
+        400:
+          $ref: '#/components/responses/Status400'
+        403:
+          $ref: "#/components/responses/Status403"
+        500:
+          $ref: "#/components/responses/Status500"                               
 components:
   schemas:
+    ImportAuthor:
+      oneOf:
+        - $ref: "#/components/schemas/Author"
+        - $ref: "#/components/schemas/Book"
+
     StatusResponse:
       description: Common response for all status codes
       type: object
